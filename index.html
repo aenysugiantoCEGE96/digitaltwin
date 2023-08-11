@@ -1,37 +1,48 @@
-<!DOCTYPE html>
+
+ <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="utf-8">
-  <!-- Include the CesiumJS JavaScript and CSS files -->
-  <script src="https://cesium.com/downloads/cesiumjs/releases/1.107.1/Build/Cesium/Cesium.js"></script>
-  <link href="https://cesium.com/downloads/cesiumjs/releases/1.107.1/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
-</head>
-<body>
-  <div id="cesiumContainer"></div>
-  <script type="module">
-    // Your access token can be found at: https://ion.cesium.com/tokens.
-    // This is the default access token from your ion account
+  <head>
 
-    Cesium.Ion.defaultAccessToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NDAyMTk3Zi03NGFiLTRiZGUtYTgzMi1hMzc4MmM3NTcyOTAiLCJpZCI6MTQ5Mzk5LCJpYXQiOjE2ODk5NDc5MDZ9.hyqOWjXUe3Yf2JBqfu0Kg0amnKtoV9s29M0GoQlu3iY';
+    <meta charset="utf-8" />
+    <title>CesiumJS: Display a Scene</title>
+    
+     <script src="https://cesium.com/downloads/cesiumjs/releases/1.107/Build/Cesium/Cesium.js"></script>
+    <link href="https://cesium.com/downloads/cesiumjs/releases/1.107/Build/Cesium/Widgets/widgets.css" rel="stylesheet">
+    
+    <style>
+        html, body, #cesiumContainer {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+  </head>
 
-    // Initialize the Cesium Viewer in the HTML element with the `cesiumContainer` ID.
-    const viewer = new Cesium.Viewer('cesiumContainer', {
-      terrain: Cesium.Terrain.fromWorldTerrain(),
-    });    
+  <body>
 
-    // Fly the camera to San Francisco at the given longitude, latitude, and height.
-    viewer.camera.flyTo({
-      destination: Cesium.Cartesian3.fromDegrees(-122.4175, 37.655, 400),
-      orientation: {
-        heading: Cesium.Math.toRadians(0.0),
-        pitch: Cesium.Math.toRadians(-15.0),
-      }
-    });
+    <div id="cesiumContainer"></div>
+    <script>
+      const apiKey = "AAPK4de2b746d8e44b05ace866c82462a062FTcxr96S-A11i51NDKRDHrLGTox-5_QnihVa8F8G1YQFAtWQEQlepiNzvHiomKta";
+      Cesium.ArcGisMapService.defaultAccessToken = apiKey;
+      const cesiumAccessToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJqdGkiOiI2NDAyMTk3Zi03NGFiLTRiZGUtYTgzMi1hMzc4MmM3NTcyOTAiLCJpZCI6MTQ5Mzk5LCJpYXQiOjE2ODk5NDc5MDZ9.hyqOWjXUe3Yf2JBqfu0Kg0amnKtoV9s29M0GoQlu3iY";
+      Cesium.Ion.defaultAccessToken = cesiumAccessToken;
+      const arcGisImagery = Cesium.ArcGisMapServerImageryProvider.fromBasemapType(Cesium.ArcGisBaseMapType.SATELLITE);
+      const viewer = new Cesium.Viewer("cesiumContainer", {
+        baseLayer: Cesium.ImageryLayer.fromProviderAsync(arcGisImagery),
+        terrain: Cesium.Terrain.fromWorldTerrain(),
+        timeline: false,
+        animation: false,
+        geocoder:false
+      });
+      viewer.camera.setView({
+        destination : Cesium.Cartesian3.fromDegrees(-118.705, 33.957, 35000),
+        orientation : {
+          heading : Cesium.Math.toRadians(0.0),
+          pitch : Cesium.Math.toRadians(-70.0),
+        }
+      });
 
-    // Add Cesium OSM Buildings, a global 3D buildings layer.
-    const buildingTileset = await Cesium.createOsmBuildingsAsync();
-    viewer.scene.primitives.add(buildingTileset);   
-  </script>
- </div>
-</body>
+    </script>
+  </body>
 </html>
